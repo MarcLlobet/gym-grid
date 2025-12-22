@@ -1,5 +1,7 @@
 # Fluency report
 
+![(final result)](screenshots/final-result.gif)
+
 ## Context
 
 The fluency zone is a section of the Individualized Practice app for students to develop factual fluency. The goal is to learn and automatize multiplication tables and additive calculations, using techniques like Spaced Repetition to make the learning process efficient.
@@ -22,7 +24,11 @@ This repository has a starting report for the fluency progress. We show a simple
 
 We want to improve the report to show a classroom's progress in learning the multiplication tables, with info for each card.
 
-Here's the proposed design: https://www.figma.com/design/JLENGCi0jWrTmlHkw6tJ0o/Fullstack-Challenge. We want to show a matrix with the classroom performance of each card. The matrix will have 12x12 rows. Rows indicate the “first operand”, columns the “second operand”. Each card is shown in a different color depending on the classroom's status.
+Here's the proposed design: 
+
+![(proposed design)](screenshots/goal.png)
+
+We want to show a matrix with the classroom performance of each card. The matrix will have 12x12 rows. Rows indicate the “first operand”, columns the “second operand”. Each card is shown in a different color depending on the classroom's status.
 
 The possible statuses are:
 
