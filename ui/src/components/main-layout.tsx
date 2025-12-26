@@ -20,6 +20,11 @@ const StudentsInfoWrapper = styled.div`
   gap: 16px;
 `;
 
+const isProd = import.meta.env.PROD;
+const url = isProd 
+  ? './attempts.json' 
+  : 'http://localhost:8080/attempts';
+
 export function MainLayout(): React.ReactNode {
   const [allAttempts, setAllAttempts] = useState<Attempt[]>([] as Attempt[]);
   const [date, setDate] = useState<DateOptionsType>(DATE_OPTIONS.all_time);
@@ -29,7 +34,7 @@ export function MainLayout(): React.ReactNode {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:8080/attempts")
+    fetch(url)
       .then((response) => response.json())
       .then((attempts: Attempt[]) => {
         setAllAttempts(attempts);
