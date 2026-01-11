@@ -1,66 +1,92 @@
-# Fluency report
+# Gym Grid
 
-![(final result)](screenshots/final-result.gif)
+Gym Grid is a dashboard for gym trainers to monitor their members' workout progress. Members attempt exercises at different weight levels, and the dashboard visualizes which exercise-weight combinations are being mastered versus still challenging.
 
-## Context
+## Data Model
 
-The fluency zone is a section of the Individualized Practice app for students to develop factual fluency. The goal is to learn and automatize multiplication tables and additive calculations, using techniques like Spaced Repetition to make the learning process efficient.
+### Attempt Entity
 
-We'll focus on the multiplication tables for this exercise. Each multiplication (or fact to learn) is a _card_, that students will have to answer correctly in the app. Here's a screenshot of a multiplication card:
+Each workout attempt is recorded as an `Attempt` with the following fields:
 
-![(fluency-screenshot)](screenshots/fluency-screenshot.png)
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | integer | Unique identifier |
+| `memberUuid` | UUID | Identifies the gym member |
+| `executedAt` | datetime | When the attempt was made |
+| `exerciseId` | integer (1-12) | The exercise being attempted |
+| `weightId` | integer (1-12) | The weight level |
+| `passed` | boolean | Whether the attempt was successful (completed reps) or failed |
 
-## The starting point 
+### Grid Dimensions
 
-Teachers use our Classroom Manager to see and manage all things related to their classes and students. They have a Reports section to track the progress of the students in the Individualized Practice.
+**Rows - Exercises (1-12):**
+1. Bench Press
+2. Squat
+3. Deadlift
+4. Shoulder Press
+5. Barbell Row
+6. Lat Pulldown
+7. Bicep Curl
+8. Tricep Extension
+9. Leg Press
+10. Lunges
+11. Plank
+12. Pull-ups
 
-This repository has a starting report for the fluency progress. We show a simple table that shows the status of each multiplication table. 
+**Columns - Weights (1-12):**
+1. 5 kg
+2. 10 kg
+3. 15 kg
+4. 20 kg
+5. 25 kg
+6. 30 kg
+7. 40 kg
+8. 50 kg
+9. 60 kg
+10. 80 kg
+11. 100 kg
+12. 120 kg
 
-![(initial-report-screenshot)](screenshots/starting-table.png)
+## Progress Status
 
+Each cell in the 12x12 matrix represents an exercise-weight combination with one of three statuses:
 
+| Status | Color | Description |
+|--------|-------|-------------|
+| Not Attempted | Gray | No attempts recorded for this combination |
+| Progressing | Green | Attempts made, majority successful |
+| Struggling | Red | Attempts made, >50% of latest attempts failed |
 
-## The goal
+The status is calculated by looking at the most recent attempt from each member for a given exercise-weight pair. If more than half of these latest attempts failed, the cell is marked as "Struggling".
 
-We want to improve the report to show a classroom's progress in learning the multiplication tables, with info for each card.
+## Date Filtering
 
-Here's the proposed design: 
+The dashboard supports filtering by time period:
+- **This week**: Attempts from the last 7 days
+- **Past month**: Attempts from the last 30 days
+- **All time**: All recorded attempts
 
-![(proposed design)](screenshots/goal.png)
+## Tech Stack
 
-We want to show a matrix with the classroom performance of each card. The matrix will have 12x12 rows. Rows indicate the “first operand”, columns the “second operand”. Each card is shown in a different color depending on the classroom's status.
+- **Framework**: React + TypeScript
+- **Build Tool**: Vite
+- **Styling**: Emotion (CSS-in-JS)
+- **Data Processing**: Functional programming with `Map.groupBy`, `Object.groupBy`, and `useMemo` for efficient transformations
 
-The possible statuses are:
+## Getting Started
 
-- Unseen: no attempts
-- Failed: for > 50 % students, the latest attempt is failed
-- In Progress: There are some attempts and it's not _Failed_
-
-We also want a filter to be able to filter by dates. The dropdown should have options for _All time_, _Past month_, and _Current week_.
-
-
-
-## Tech solution
-
-The UI is built with React and Vite, using Emotion for styling. Data processing in the frontend follows a functional paradigm: pure functions, `useMemo` for memoization, and utilities like `Map.groupBy` and `Object.groupBy` are used to transform and group student attempts without mutating the original state. This approach ensures efficient, predictable state management and enables fast rendering of the results table and date filters.
-
-**Frontend technical highlights:**
-- Functional programming for data transformation: summaries, grouping, and filtering are done immutably.
-- Render optimization with `useMemo` and decoupled components.
-- Date filter dropdown and efficient rendering of a 12x12 matrix table.
-
-### Get your BE ready
-1. `make fixtures`
-2. `make start-api`
-
-### How to start the Frontend
-
-Start the frontend development server:
 ```bash
-	cd ui
-	npm run dev
-	# Access the UI at http://localhost:5173 (default Vite port)
+npm install
+npm run dev      # Access at http://localhost:5173
 ```
 
-### Unit tests
-Run: `npm run test`.
+## Available Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build |
+| `npm run test` | Run unit tests |
+| `npm run lint` | Run ESLint |
+| `npm run fixtures` | Generate test data |

@@ -1,9 +1,0 @@
-services:
-  php-fpm:
-    build: api
-    working_dir: /var/www/html
-    command: "php -S 0.0.0.0:8080 public/index.php"
-    volumes:
-      - ./api:/var/www/html
-    ports:
-      - "8080:8080"

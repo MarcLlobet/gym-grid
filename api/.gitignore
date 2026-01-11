@@ -1,4 +1,0 @@
-var/cache
-var/database.sqlite
-vendor
-public/bundles
